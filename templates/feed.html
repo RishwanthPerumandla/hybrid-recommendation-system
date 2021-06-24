@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block title %}Youv'e logged in {% endblock %} {%
+block content %}
+<p>Recommendation::::</p>
+
+{% for item in data1 %}
+<div class="container">
+  <ul>
+    <li>{{item.user_id}}</li>
+    <li>{{item.title}}</li>
+    <li>{{item.category}}</li>
+    <img src="{{item.image}}" width="200" />
+  </ul>
+</div>
+{% endfor %} {% endblock %}
