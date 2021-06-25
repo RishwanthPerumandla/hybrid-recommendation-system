@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Youv'e logged in {% endblock %} {%
+block content %}
+<p>Recommendation::::</p>
+
+{% for item in data1 %} {% for item1 in item %}
+<div class="container">
+  <ul>
+    <li>title::: {{item1.title}}</li>
+    <li>category::: {{item1.category}}</li>
+    <img src="{{item1.image}}" width="300" />
+    <button>
+      <a
+        class="nav-item nav-link"
+        href="/like/contentbased/{{item1.post_id}}"
+        alt="Image Broke"
+        >Like</a
+      >
+    </button>
+  </ul>
+</div>
+{% endfor %} {% endfor %} {% endblock %}

@@ -151,7 +151,7 @@ df_test = pd.DataFrame(test, columns=['user_id', 'post_id', 'merged'])
 df_test
 
 
-def recommend(user_id, n=10):
+def recommend(user_id, n=15):
     res = pd.DataFrame(columns=['user_id', 'post_id', 'estimate'])
     for i in df_test.post_id.unique():
         temp = pd.DataFrame([[user_id, i, algo.predict(user_id, i)[3]]], columns=[

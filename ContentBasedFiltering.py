@@ -93,7 +93,7 @@ csm_count = cosine_similarity(count_matrix, count_matrix)
 # delete the new columns as processing is done on the merged column
 df_posts.drop(columns=['title1', 'category1',
               'post_type1', 'merged'], inplace=True)
-df_posts.drop(columns='post_id', inplace=True)
+# df_posts.drop(columns='post_id', inplace=True)
 df_posts.style.set_properties(**{'text-align': 'center'})
 
 
@@ -108,18 +108,22 @@ indices = pd.Series(df_posts.index, index=df_posts.title)
 # def recommend(post, csm):
 # later
 
+# choosing this csm as it covers both aspects
+# choosing this csm as it covers both aspects
 
-# choosing this csm as it covers both aspects
-# choosing this csm as it covers both aspects
+
 def recom(post, csm=(csm_tf + csm_count)/2):
     idx = indices[post]
+    # print(idx)
     score_series = list(enumerate(csm[idx]))
+    # print("Score Series::")
+    # print(score_series)
     score_series = sorted(score_series, key=lambda x: x[1], reverse=True)
     # not recommending the original post itself, starting from 1
-    score_series = score_series[1:11]
+    score_series = score_series[1:20]
     post_indices = [i[0] for i in score_series]
     # print(df_posts.loc[post_indices])
-    return df_posts.loc[post_indices].style.hide_index()
+    return df_posts.loc[post_indices].to_json(orient='records')
 
 
 # print(csm_tf)
@@ -128,4 +132,4 @@ def recom(post, csm=(csm_tf + csm_count)/2):
 
 
 # ### Final recommendation
-# recommend('Travelling')
+# recom('Travelling')
