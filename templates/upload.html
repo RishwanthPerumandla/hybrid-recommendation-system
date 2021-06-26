@@ -1,39 +1,69 @@
 {% extends "base.html" %} {% block title %}Upload{% endblock %} {% block content
-%} {% if message %}
+%} {%block nav%}
+<nav class="commonnav">
+  <div>
+    <div class="container nav-wrapper">
+      <div class="brand">
+        <span><strong>MINI PROJECT</strong></span>
+      </div>
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li>
+          <a href="/logged_in">Home</a>
+        </li>
+        <li>
+          <a href="/feed">Feed</a>
+        </li>
+        <li><a href="/recommendations">Recommendations</a></li>
+        <li class="active">
+          <a href="/upload">Upload</a>
+        </li>
+
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{%endblock %} {% if message %}
 <div class="alert alert-secondary" role="alert">
   <p>{{ message }}</p>
 </div>
 {% endif %}
+<div class="container">
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        name="title"
+        class="form-control"
+        id="inputTitle"
+        aria-describedby="emailHelp"
+        placeholder="Enter Title"
+      />
+      <small id="fullName" class="form-text text-muted"
+        >Please Enter the Title for Post</small
+      >
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input
+        name="category"
+        class="form-control"
+        id="category"
+        placeholder="Enter Category"
+      />
+    </div>
+    <div class="form-group">
+      <label for="image">Upload Image</label>
+      <input type="file" name="image" />
+    </div>
 
-<form action="" method="post" enctype="multipart/form-data">
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input
-      name="title"
-      class="form-control"
-      id="inputTitle"
-      aria-describedby="emailHelp"
-      placeholder="Enter Title"
-    />
-    <small id="fullName" class="form-text text-muted"
-      >Please Enter the Title for Post</small
-    >
-  </div>
-  <div class="form-group">
-    <label for="category">Category</label>
-    <input
-      name="category"
-      class="form-control"
-      id="category"
-      placeholder="Enter Category"
-    />
-  </div>
-  <div class="form-group">
-    <label for="image">Upload Image</label>
-    <input type="file" name="image" />
-  </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
 {% endblock %}

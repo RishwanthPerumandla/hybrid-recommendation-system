@@ -1,5 +1,33 @@
-{% extends "base.html" %} {% block title %}Register System{% endblock %} {%
-block content %}
-<h1>You are signed out!</h1>
+{% extends "base.html" %} {% block title %}Recommendation System{% endblock %}
+{% block content %} {%block nav%}
+<nav class="commonnav">
+  <div>
+    <div class="container nav-wrapper">
+      <div class="brand">
+        <span><strong>MINI PROJECT</strong></span>
+      </div>
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li>
+          <a href="/login">login</a>
+        </li>
+
+        <li>
+          <a href="/">Register</a>
+        </li>
+        <!-- <li><a href="/profile">Profile</a></li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{%endblock %}
+<div class="container">
+  <h1>You are signed out!</h1>
+</div>
 
 {% endblock %}

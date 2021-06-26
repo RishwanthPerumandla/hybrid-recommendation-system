@@ -1,25 +1,63 @@
 {% extends "base.html" %} {% block title %}Youv'e logged in {% endblock %} {%
 block content %}
 <!-- <p>Recommendation::::</p> -->
+<body class="bodyfeed">
+  {%block nav%}
+  <nav class="commonnav">
+    <div>
+      <div class="container nav-wrapper">
+        <div class="brand">
+          <span><strong>MINI PROJECT</strong></span>
+        </div>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <a href="/logged_in">Home</a>
+          </li>
+          <li>
+            <a href="/feed">Feed</a>
+          </li>
+          <li class="active"><a href="/recommendations">Recommendations</a></li>
+          <li>
+            <a href="/upload">Upload</a>
+          </li>
+          <!-- <li><a href="/profile">Profile</a></li> -->
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-{% for item in data1 %}
-<div class="container">
-  <ul>
-    <li>User ID::: {{item.user_id}}</li>
-    <li>User ID::: {{item.post_id}}</li>
-    <li>title::: {{item.title}}</li>
-    <li>category::: {{item.category}}</li>
-    <img src="{{item.image}}" width="300" />
+  {%endblock %}
 
-    <button>
-      <a
-        class="nav-item nav-link"
-        href="/like/{{item.post_id}}"
-        alt="Image Broke"
-        >Like</a
-      >
-    </button>
+  <main class="grid">
+    {% for item in data1 %}
+    <article>
+      <div class="author">{{item.user_id}}</div>
+      <img src="{{item.image}}" alt="Image Broken" height="300" />
+      <div class="text">
+        <br />
+        <h5>Category : {{item.category}}</h5>
+        <br />
+        <p>Title:{{item.title}}</p>
+        <div class="like">
+          <button>
+            <a
+              class="nav-item nav-link"
+              href="/like/{{item.post_id}}"
+              alt="Image Broke"
+              >Like</a
+            >
+          </button>
+        </div>
+      </div>
+    </article>
 
-    {% endfor %} {% endblock %}
-  </ul>
-</div>
+    {% endfor %}
+  </main>
+</body>
+{% endblock %}

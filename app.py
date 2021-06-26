@@ -4,6 +4,7 @@ import pymongo
 import bcrypt
 import json
 import base64
+from bson.objectid import ObjectId
 
 # set app as a Flask instance
 app = Flask(__name__)
@@ -56,9 +57,12 @@ def index():
             # find the new created account and its email
             user_data = records.find_one({"email": email})
             new_email = user_data['email']
-            session["email"] = email_val
-            session["_id"] = id
-            session["name"] = name
+            new_user = user_data['name']
+            id = user_data['_id']
+            session["email"] = new_email
+            var1 = ObjectId(id)
+            session['_id'] = (str(var1))
+            session["name"] = new_user
             # if registered redirect to logged in as the registered user
             return render_template('logged_in.html', email=new_email)
     return render_template('index.html')
@@ -86,8 +90,9 @@ def login():
             # if bcrypt.checkpw(password.encode('utf-8'), passwordcheck):
             if email_found:
                 session["email"] = email_val
-                session["_id"] = id
                 session["name"] = name
+                var1 = ObjectId(id)
+                session['_id'] = (str(var1))
 
                 return redirect(url_for('logged_in'))
             else:
@@ -105,7 +110,12 @@ def login():
 def logged_in():
     if "email" in session:
         email = session["email"]
-        return render_template('logged_in.html', email=email)
+        name = session["name"]
+        id = session['_id']
+        # content = posts.find({}).sort("timestamp", 1)
+        # content = json.dumps(content)
+        # data1 = json.loads(content)
+        return render_template('logged_in.html', email=email,  name=name, id=id)
     else:
         return redirect(url_for("login"))
 
@@ -114,6 +124,8 @@ def logged_in():
 def logout():
     if "email" in session:
         session.pop("email", None)
+        session.pop("name", None)
+        session.pop("_id", None)
         return render_template("signout.html")
     else:
         return render_template('index.html')
@@ -150,9 +162,10 @@ def newsfeed():
         data = []
 
         for post_id in likes.find({"user_id": id}, {"post_id": 1, "_id": 0}).sort(
-                "timestamp", 1).limit(5):
-            idvalue = post_id.get('post_id')
-            content = posts.find_one({"_id": idvalue}, {"title": 1, "_id": 0})
+                "timestamp", 1).limit(10).distinct("post_id"):
+            # idvalue = post_id.get('post_id')
+            content = posts.find_one({"_id": post_id}, {"title": 1, "_id": 0})
+            # print(content)
             data.append(content)
 
         data = json.dumps(data)
@@ -160,8 +173,11 @@ def newsfeed():
         # print(data)
         data1 = []
         for title in data:
-            data2 = recom(title.get('title'))
-            data1.append(json.loads(data2))
+            print(title.get('title'))
+            if title.get('title') is not None:
+                data2 = recom(str(title.get('title')))
+                # print(data2)
+                data1.append(json.loads(data2))
 
         data1 = json.dumps(data1)
         data1 = json.loads(data1)
@@ -214,7 +230,7 @@ def upload():
         if request.method == "POST":
             title = request.form.get("title")
             category = request.form.get("category")
-            post_type = "post"
+            post_type = "blog"
             image = request.files['image']
             image_string = base64.b64encode(image.read()).decode('utf-8')
             image_string = "data:image/jpeg;base64," + image_string

@@ -1,24 +1,66 @@
-{% extends "base.html" %}
-{% block title %}Register System{% endblock %}
+{% extends "base.html" %} {% block title %}Register System{% endblock %} {%
+block content %}
+<!-- <body class="container"> -->
+{%block nav%}
+<nav class="commonnav">
+  <div>
+    <div class="container nav-wrapper">
+      <div class="brand">
+        <span><strong>MINI PROJECT</strong></span>
+      </div>
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li>
+          <a href="/login">login</a>
+        </li>
 
-{% block content %}
-
-{% if message  %}
-    <div class="alert alert-secondary" role="alert">
-        <p>{{ message }}</p>
+        <li>
+          <a href="/">Register</a>
+        </li>
+        <!-- <li><a href="/profile">Profile</a></li> -->
+      </ul>
     </div>
+  </div>
+</nav>
+
+{%endblock %}
+<div class="container">
+{% if message %}
+
+<div class="alert alert-secondary" role="alert">
+  <p>{{ message }}</p>
+</div>
 {% endif %}
 
-<form action="" method="post">
-    <div class="form-group">
-        <label for="Fullname">Full name</label>
-        <input name="fullname" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter full name">
-        <small id="fullName" class="form-text text-muted">Please enter your full name(First name and Last name)</small>
+<form action="/" method="post">
+  <div class="form-group">
+    <label for="Fullname">Full name</label>
+    <input
+      name="fullname"
+      class="form-control"
+      id="inputFullName"
+      aria-describedby="emailHelp"
+      placeholder="Enter full name"
+    />
+    <small id="fullName" class="form-text text-muted"
+      >Please enter your full name(First name and Last name)</small
+    >
   </div>
   <div class="form-group">
-        <label for="InputEmail">Email address</label>
-        <input name="email" class="form-control" id="InputEmail"  placeholder="Enter email">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <label for="InputEmail">Email address</label>
+    <input
+      name="email"
+      class="form-control"
+      id="InputEmail"
+      placeholder="Enter email"
+    />
+    <small id="emailHelp" class="form-text text-muted"
+      >We'll never share your email with anyone else.</small
+    >
   </div>
   <!-- <div class="form-group"> 
     <label for="InputPassword">Password</label>
@@ -31,10 +73,7 @@
 
     </div> -->
   <button type="submit" class="btn btn-primary">Submit</button>
-
-
 </form>
-
-
-
+<!-- </body> -->
+</div>
 {% endblock %}
