@@ -4,13 +4,13 @@
 # # Content Based Recommendation System (Recommending similar posts for given post)
 
 
+import warnings
+from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import pandas as pd
 import pymongo
 
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 
-import warnings
 warnings.filterwarnings("ignore")
 
 # connoct to your Mongo DB database
@@ -122,7 +122,7 @@ def recom(post, csm=(csm_tf + csm_count)/2):
     # not recommending the original post itself, starting from 1
     score_series = score_series[1:20]
     post_indices = [i[0] for i in score_series]
-    # print(df_posts.loc[post_indices])
+
     return df_posts.loc[post_indices].to_json(orient='records')
 
 
@@ -132,4 +132,4 @@ def recom(post, csm=(csm_tf + csm_count)/2):
 
 
 # ### Final recommendation
-recom('PENCIL RENDERING')
+recom('Gynecology')

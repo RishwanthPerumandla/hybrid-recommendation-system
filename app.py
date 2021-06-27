@@ -137,7 +137,9 @@ def recommendations():
 
     if "email" in session:
         id = session["_id"]
-        data1 = recommend(id)
+        var1 = ObjectId(id)
+        print(str(var1))
+        data1 = recommend(str(var1))
         return render_template('feed.html', data1=json.loads(data1))
     else:
         return redirect(url_for("login"))
@@ -162,9 +164,11 @@ def newsfeed():
         data = []
 
         for post_id in likes.find({"user_id": id}, {"post_id": 1, "_id": 0}).sort(
-                "timestamp", 1).limit(10).distinct("post_id"):
+                "timestamp", 1).distinct("post_id")[0:6]:
             # idvalue = post_id.get('post_id')
-            content = posts.find_one({"_id": post_id}, {"title": 1, "_id": 0})
+            print(post_id)
+            content = posts.find_one(
+                {"_id": post_id}, {"title": 1, "_id": 0})
             # print(content)
             data.append(content)
 
@@ -173,11 +177,17 @@ def newsfeed():
         # print(data)
         data1 = []
         for title in data:
-            print(title.get('title'))
-            if title.get('title') is not None:
-                data2 = recom(str(title.get('title')))
-                # print(data2)
-                data1.append(json.loads(data2))
+
+            # print('b:::;+ ' + var22)
+            # var22 = str(var22, encoding)
+            # print(var22)
+            if title is not None:
+                if title.get('title') is not None:
+                    var22 = str(title.get('title'))
+                    # print(var22)
+                    data2 = recom(str(var22))
+                    # print(data2)
+                    data1.append(json.loads(data2))
 
         data1 = json.dumps(data1)
         data1 = json.loads(data1)
@@ -230,7 +240,7 @@ def upload():
         if request.method == "POST":
             title = request.form.get("title")
             category = request.form.get("category")
-            post_type = "blog"
+            post_type = "skill"
             image = request.files['image']
             image_string = base64.b64encode(image.read()).decode('utf-8')
             image_string = "data:image/jpeg;base64," + image_string
