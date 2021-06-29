@@ -14,14 +14,15 @@ import pymongo
 warnings.filterwarnings("ignore")
 
 # connoct to your Mongo DB database
-client = pymongo.MongoClient('localhost', 27017)
+client = pymongo.MongoClient(
+    "mongodb+srv://rishi:rishi@cluster0.mhdj6.mongodb.net/recom?retryWrites=true&w=majority")
 
 # get the database name
 db = client.get_database('recom')
 # get the particular collection that contains the data
 users = db.users
-posts = db.posts
 likes = db.likes
+posts = db.posts
 
 
 # print(list(posts.find()))
@@ -29,6 +30,9 @@ df_posts = pd.DataFrame(list(posts.find()))
 df_users = pd.DataFrame(list(users.find()))
 df_views = pd.DataFrame(list(likes.find()))
 df_posts['_id'] = df_posts['_id'].astype(str)
+df_users['_id'] = df_users['_id'].astype(str)
+df_views['_id'] = df_views['_id'].astype(str)
+
 # print(df_posts["_id"])
 # print(df_views.head())
 
@@ -123,7 +127,7 @@ def recom(post, csm=(csm_tf + csm_count)/2):
     # not recommending the original post itself, starting from 1
     score_series = score_series[1:20]
     post_indices = [i[0] for i in score_series]
-    print(df_posts.loc[post_indices].to_json(orient='records'))
+    # print(df_posts.loc[post_indices].to_json(orient='records'))
     return df_posts.loc[post_indices].to_json(orient='records')
 
 

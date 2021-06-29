@@ -15,19 +15,23 @@ warnings.filterwarnings("ignore")
 
 
 # connoct to your Mongo DB database
-client = pymongo.MongoClient('localhost', 27017)
+client = pymongo.MongoClient(
+    "mongodb+srv://rishi:rishi@cluster0.mhdj6.mongodb.net/recom?retryWrites=true&w=majority")
 
 # get the database name
 db = client.get_database('recom')
 # get the particular collection that contains the data
 users = db.users
-posts = db.posts
 likes = db.likes
+posts = db.posts
 
 
 df_posts = pd.DataFrame(list(posts.find()))
 df_users = pd.DataFrame(list(users.find()))
 df_views = pd.DataFrame(list(likes.find()))
+df_posts['_id'] = df_posts['_id'].astype(str)
+df_users['_id'] = df_users['_id'].astype(str)
+df_views['_id'] = df_views['_id'].astype(str)
 
 df_posts.rename(columns={'_id': 'post_id',
                 ' post_type': 'post_type'}, inplace=True)

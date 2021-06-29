@@ -11,7 +11,8 @@ app = Flask(__name__)
 # encryption relies on secret keys so they could be run
 app.secret_key = "testing"
 # connoct to your Mongo DB database
-client = pymongo.MongoClient('localhost', 27017)
+client = pymongo.MongoClient(
+    "mongodb+srv://rishi:rishi@cluster0.mhdj6.mongodb.net/recom?retryWrites=true&w=majority")
 
 # get the database name
 db = client.get_database('recom')
@@ -177,10 +178,6 @@ def newsfeed():
         # print(data)
         data1 = []
         for title in data:
-
-            # print('b:::;+ ' + var22)
-            # var22 = str(var22, encoding)
-            # print(var22)
             if title is not None:
                 if title.get('title') is not None:
                     var22 = str(title.get('title'))
@@ -247,7 +244,7 @@ def upload():
             # print(image_string)
             post = {'title': title, 'category': category,
                     'post_type': post_type, 'image': image_string}
-            # insert it in the record collection
+            # insert it in the posts collection
             posts.insert_one(post)
             return render_template('uploadsuccess.html')
         else:
