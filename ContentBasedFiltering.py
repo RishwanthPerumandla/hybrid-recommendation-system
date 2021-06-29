@@ -24,11 +24,12 @@ posts = db.posts
 likes = db.likes
 
 
+# print(list(posts.find()))
 df_posts = pd.DataFrame(list(posts.find()))
 df_users = pd.DataFrame(list(users.find()))
 df_views = pd.DataFrame(list(likes.find()))
-# print(df_posts.head())
-# print(df_users.head())
+df_posts['_id'] = df_posts['_id'].astype(str)
+# print(df_posts["_id"])
 # print(df_views.head())
 
 
@@ -122,7 +123,7 @@ def recom(post, csm=(csm_tf + csm_count)/2):
     # not recommending the original post itself, starting from 1
     score_series = score_series[1:20]
     post_indices = [i[0] for i in score_series]
-
+    print(df_posts.loc[post_indices].to_json(orient='records'))
     return df_posts.loc[post_indices].to_json(orient='records')
 
 
@@ -132,4 +133,4 @@ def recom(post, csm=(csm_tf + csm_count)/2):
 
 
 # ### Final recommendation
-recom('Gynecology')
+# recom('Recom Engine')
