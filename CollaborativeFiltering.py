@@ -15,11 +15,11 @@ warnings.filterwarnings("ignore")
 
 
 # connoct to your Mongo DB database
-# client = pymongo.MongoClient(
-#     "mongodb+srv://rishi:rishi@cluster0.mhdj6.mongodb.net/recom?retryWrites=true&w=majority")
-
 client = pymongo.MongoClient(
-    "localhost", 27017)
+    "mongodb+srv://rishi:rishi@cluster0.mhdj6.mongodb.net/recom?retryWrites=true&w=majority")
+
+# client = pymongo.MongoClient(
+#     "localhost", 27017)
 
 # get the database name
 db = client.get_database('recom')
