@@ -63,14 +63,14 @@ post-recommender/
 ### ✅ Part 1: Setup & Planning
 - [x] Finalize project structure
 - [x] Define schema for users, posts, interactions
-- [ ] Set up MongoDB connection in FastAPI
+- [x] Set up MongoDB connection in FastAPI
 - [ ] Initialize MLflow and test tracking
 
 ### 🚧 Part 2: Text + Image Embeddings
-- [ ] Build SBERT embedding generator
-- [ ] Build ResNet50 / ViT embedding extractor
-- [ ] Create pipeline to embed all posts
-- [ ] Store embeddings in MongoDB or vector store
+- [x] Build SBERT embedding generator
+- [x] Build ResNet50 / ViT embedding extractor
+- [x] Create pipeline to embed all posts
+- [x] Store embeddings in MongoDB or vector store
 
 ### 🚧 Part 3: Collaborative Filtering
 - [ ] Prepare interaction matrix from likes
