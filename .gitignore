@@ -1,0 +1,65 @@
+# Python bytecode & caches
+**/__pycache__/
+**/*.py[cod]
+**/*.pyo
+**/*.pyd
+**/*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+
+# VSCode, PyCharm, JetBrains
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest cache and test outputs
+.pytest_cache/
+.cache/
+*.cover
+coverage/
+htmlcov/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# FastAPI/Uvicorn run artifacts
+*.db
+*.sqlite3
+
+# Data artifacts
+data/
+models/
+mlruns/
+*.pkl
+*.pt
+*.ckpt
+*.h5
+
+# Image, temp, and generated files
+sample_image.txt
+uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# System/IDE/OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup or swap files
+*.bak
+*.swp
+*.swo
