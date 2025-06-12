@@ -64,7 +64,7 @@ post-recommender/
 - [x] Finalize project structure
 - [x] Define schema for users, posts, interactions
 - [x] Set up MongoDB connection in FastAPI
-- [ ] Initialize MLflow and test tracking
+- [X] Initialize MLflow and test tracking
 
 ### 🚧 Part 2: Text + Image Embeddings
 - [x] Build SBERT embedding generator
@@ -73,17 +73,17 @@ post-recommender/
 - [x] Store embeddings in MongoDB or vector store
 
 ### 🚧 Part 3: Collaborative Filtering
-- [ ] Prepare interaction matrix from likes
-- [ ] Train and evaluate Surprise/LightFM model
-- [ ] Serialize user latent factors
+- [x] Prepare interaction matrix from likes
+- [x] Train and evaluate Surprise/LightFM model
+- [x] Serialize user latent factors
 
 ### 🚧 Part 4: Hybrid Recommender
-- [ ] Combine SBERT + ResNet + user embedding
-- [ ] Compute cosine similarity
-- [ ] Create FastAPI route for /recommendations
+- [x] Combine SBERT + ResNet + user embedding
+- [x] Compute cosine similarity
+- [x] Create FastAPI route for /recommendations
 
 ### 🚧 Part 5: MLflow + API Integration
-- [ ] Log experiments with MLflow
+- [x] Log experiments with MLflow
 - [ ] Serve FastAPI routes with Docker
 - [ ] Create dummy frontend (or use Postman for testing)
 
