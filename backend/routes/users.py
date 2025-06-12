@@ -1,12 +1,13 @@
-# backend/routes/users.py
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from backend.database import users_col
 
 router = APIRouter()
 
 @router.get("/users")
-def get_all_users():
-    users = users_col.find()
+def get_all_users(skip: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=100)):
+    users_cursor = users_col.find().skip(skip).limit(limit)
+    users = list(users_cursor)
+
     return {
         "users": [
             {
@@ -15,5 +16,10 @@ def get_all_users():
                 "email": u.get("email", "")
             }
             for u in users
-        ]
+        ],
+        "pagination": {
+            "skip": skip,
+            "limit": limit,
+            "returned": len(users)
+        }
     }
