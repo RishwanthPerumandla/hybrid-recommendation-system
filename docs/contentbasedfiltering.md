@@ -106,3 +106,9 @@ Each post = point in 2432D space
 
 ## 📬 Summary
 I’ve built a **zero-shot hybrid recommender** that uses ML for embeddings, cosine similarity for ranking, and REST APIs for serving. It is extensible, explainable, and production-ready for small to mid-scale deployments.
+
+
+
+TODO:
+- [] each request time is almost 7 seconds, fix to reduce latency
+- [] 
