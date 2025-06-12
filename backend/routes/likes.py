@@ -21,11 +21,14 @@ def get_liked_posts(user_id: str, skip: int = Query(0, ge=0), limit: int = Query
         "image": post.get("image"),
     } for post in posts]
 
+    total_likes = likes_col.count_documents({"user_id": user_id})
     return {
         "liked_posts": results,
         "pagination": {
             "skip": skip,
             "limit": limit,
-            "returned": len(results)
+            "returned": len(results),
+            "total": total_likes
         }
     }
+

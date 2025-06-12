@@ -5,54 +5,61 @@ from bson import ObjectId
 
 def recommend_similar_posts(user_id: str, top_k: int = 10):
     """
-    Recommends top-K posts based on hybrid similarity (text + image)
+    Fast content-based recommendation (text + image embeddings)
     """
 
-    # 1. Get liked post IDs by user
-    liked_post_ids = [entry["post_id"] for entry in likes_col.find({"user_id": user_id})]
-    if not liked_post_ids:
+    # 1. Get liked post ObjectIds
+    liked_entries = list(likes_col.find({"user_id": user_id}, {"post_id": 1}))
+    liked_ids = [entry["post_id"] for entry in liked_entries]
+
+    if not liked_ids:
         return []
 
-    # 2. Get embeddings for liked posts
-    liked_embeddings = []
-    for post_id in liked_post_ids:
-        post = posts_col.find_one({"_id": post_id})
-        if post and "text_emb" in post and "image_emb" in post:
-            combined = np.concatenate([np.array(post["text_emb"]), np.array(post["image_emb"])])
-            liked_embeddings.append(combined)
+    # 2. Fetch liked posts in bulk (projection for efficiency)
+    liked_posts = list(posts_col.find(
+        {"_id": {"$in": liked_ids}},
+        {"text_emb": 1, "image_emb": 1}
+    ))
+
+    liked_embeddings = [
+        np.concatenate([np.array(p["text_emb"]), np.array(p["image_emb"])])
+        for p in liked_posts if "text_emb" in p and "image_emb" in p
+    ]
 
     if not liked_embeddings:
         return []
 
-    # 3. Average to get user profile vector
     user_profile = np.mean(np.stack(liked_embeddings), axis=0).reshape(1, -1)
 
-    # 4. Fetch all posts excluding liked ones
-    all_posts = list(posts_col.find({"_id": {"$nin": [ObjectId(pid) for pid in liked_post_ids]}}))
+    # 3. Fetch candidate posts (excluding liked) with required fields only
+    candidate_cursor = posts_col.find(
+        {"_id": {"$nin": liked_ids}},
+        {"text_emb": 1, "image_emb": 1, "title": 1, "category": 1, "post_type": 1, "image": 1}
+    )
 
     post_vectors = []
-    post_metadata = []
+    post_docs = []
 
-    for post in all_posts:
+    for post in candidate_cursor:
         if "text_emb" in post and "image_emb" in post:
             vec = np.concatenate([np.array(post["text_emb"]), np.array(post["image_emb"])])
             post_vectors.append(vec)
-            post_metadata.append(post)
+            post_docs.append(post)
 
     if not post_vectors:
         return []
 
-    # 5. Compute cosine similarity
-    sims = cosine_similarity(user_profile, np.stack(post_vectors))[0]
+    vectors_np = np.stack(post_vectors)
+    similarities = cosine_similarity(user_profile, vectors_np)[0]
 
-    # 6. Get top-k post indices
-    top_indices = sims.argsort()[::-1][:top_k]
+    # 4. Use argsort for top-k
+    top_indices = np.argpartition(-similarities, top_k)[:top_k]
+    top_indices = top_indices[np.argsort(-similarities[top_indices])]
 
-    # 7. Prepare and return recommendations
     recommendations = []
     for idx in top_indices:
-        post = post_metadata[idx]
-        score = sims[idx]
+        post = post_docs[idx]
+        score = similarities[idx]
         recommendations.append({
             "_id": str(post["_id"]),
             "title": post.get("title"),
