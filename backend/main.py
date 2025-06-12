@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from backend.routes import recommendations
+from backend.routes import users, likes, recommendations
 
 load_dotenv()
 
@@ -15,5 +15,6 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "Post Recommender API is running 🚀"}
-
+app.include_router(users.router)
+app.include_router(likes.router)
 app.include_router(recommendations.router)
