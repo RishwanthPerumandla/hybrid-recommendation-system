@@ -17,26 +17,31 @@ import { useNavigate } from 'react-router-dom';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [totalCount, setTotalCount] = useState(0); // optional if backend returns total
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const usersPerPage = 6;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/users');
-        setUsers(response.data.users || []);
-      } catch (error) {
-        console.error('❌ Failed to fetch users:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const fetchUsers = async (page) => {
+    setLoading(true);
+    try {
+      const skip = (page - 1) * usersPerPage;
+      const response = await axios.get(
+        `http://localhost:8000/users?skip=${skip}&limit=${usersPerPage}`
+      );
+      setUsers(response.data.users || []);
+      setTotalCount(response.data.pagination?.total || 100); // fallback if total not returned
+    } catch (error) {
+      console.error('❌ Failed to fetch users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const paginatedUsers = users.slice((page - 1) * usersPerPage, page * usersPerPage);
+  useEffect(() => {
+    fetchUsers(page);
+  }, [page]);
 
   const handlePageChange = (_, value) => {
     setPage(value);
@@ -61,7 +66,7 @@ const UserList = () => {
       <Divider sx={{ mb: 3 }} />
 
       <Grid container spacing={3}>
-        {paginatedUsers.map((user) => (
+        {users.map((user) => (
           <Grid item xs={12} sm={6} md={4} key={user.id}>
             <Card elevation={3} sx={{ height: '100%' }}>
               <CardContent>
@@ -86,7 +91,7 @@ const UserList = () => {
 
       <Stack mt={5} alignItems="center">
         <Pagination
-          count={Math.ceil(users.length / usersPerPage)}
+          count={Math.ceil(totalCount / usersPerPage)} // fallback if `total` not returned
           page={page}
           onChange={handlePageChange}
           color="primary"

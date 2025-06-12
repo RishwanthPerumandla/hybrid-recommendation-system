@@ -1,117 +1,132 @@
-# 📌 Post Recommendation System (Text + Image Hybrid)
+# 🔮 Hybrid Post Recommendation System
 
-A modern **hybrid recommendation system** that uses **textual (captions, hashtags)** and **visual (images)** information along with **user interactions** to recommend posts that users are most likely to engage with (like, comment, save).
+A full-stack, multimodal post recommendation system combining **content-based** (text + image) and **collaborative filtering** techniques. This project is built to serve personalized post suggestions for social platforms or content-driven apps.
 
----
+## 🧠 Features
 
-## 🧠 Key Features
-
-- **BERT / SBERT** for text embeddings
-- **ResNet / Vision Transformer (ViT)** for image embeddings
-- **Collaborative Filtering (KNN / NCF)** based on user interaction
-- **Hybrid Fusion** of multimodal data
-- **MLflow** for experiment tracking
-- **MongoDB** as the backend store
-- **FastAPI** for REST API
-- **Dockerized** for easy deployment
+* 🔍 **Content-Based Recommendations**: Uses hybrid text + image embeddings and cosine similarity.
+* 🡥 **Collaborative Filtering**: Matrix factorization (SVD) via `Surprise`, trained on user-post interactions.
+* ⚖️ **Hybrid Recommendations**: Blends both methods for more diverse and accurate results.
+* ⚡ **FastAPI Backend**: Modular, clean routes for users, likes, and recommendations.
+* 🌐 **React Frontend (MUI + Vite)**: Clean dashboard with tabbed views and pagination.
+* 📈 **MLflow Tracking**: All model metrics and artifacts are logged for reproducibility.
+* 🐳 **Docker-Ready**: Clean folder structure and setup for containerization (optional).
 
 ---
 
-## 📁 Project Structure
+## 🏗️ Tech Stack
+
+| Layer                 | Technology                    |
+| --------------------- | ----------------------------- |
+| Frontend              | React + Vite + Material UI    |
+| Backend               | FastAPI                       |
+| ML/NLP                | NumPy, Scikit-learn, Surprise |
+| DB                    | MongoDB                       |
+| MLOps                 | MLflow                        |
+| Deployment (optional) | Docker                        |
+
+---
+
+## 📂 Project Structure
 
 ```
-post-recommender/
-├── backend/                     # FastAPI app
-│   ├── main.py                 # FastAPI entrypoint
+.
+├── backend/
+│   ├── main.py
 │   ├── routes/
-│   └── utils/
-│
-├── ml_pipeline/                # All ML/DL logic
-│   ├── embeddings/            # SBERT, ResNet, ViT embeddings
-│   ├── recommender/           # Hybrid recommender logic
-│   ├── trainer/               # Model training scripts
-│   └── evaluator/             # Metrics: Precision@K, Recall@K
-│
-├── data/                       # Datasets
-│   ├── raw/
+│   ├── database.py
+│   └── ...
+├── ml_pipeline/
+│   ├── recommender/
+│   │   ├── content_recommender.py
+│   │   └── ...
+│   └── train_collab_model.py
+├── data/
 │   └── processed/
-│
-├── mlruns/                     # MLflow tracking logs
-│
-├── docker-compose.yml
-├── Dockerfile
+├── frontend/
+│   ├── src/
+│   ├── pages/
+│   └── components/
 └── README.md
 ```
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 How to Run
 
-| Layer         | Tech                          |
-|---------------|-------------------------------|
-| Language      | Python 3.10                   |
-| API Framework | FastAPI                       |
-| ML Framework  | PyTorch, HuggingFace, sklearn |
-| Database      | MongoDB                       |
-| Experiment    | MLflow, DVC (optional)        |
-| Deployment    | Docker + Docker Compose       |
+### 1. Clone the repo
 
----
+```bash
+git clone https://github.com/RishwanthPerumandla/hybrid-recommendation-system.git
+cd hybrid-recommendation-system
+```
 
-## 📋 TODOs & Milestones
+### 2. Start MongoDB
 
-### ✅ Part 1: Setup & Planning
-- [x] Finalize project structure
-- [x] Define schema for users, posts, interactions
-- [x] Set up MongoDB connection in FastAPI
-- [X] Initialize MLflow and test tracking
+Make sure MongoDB is running locally or via Atlas.
 
-### 🚧 Part 2: Text + Image Embeddings
-- [x] Build SBERT embedding generator
-- [x] Build ResNet50 / ViT embedding extractor
-- [x] Create pipeline to embed all posts
-- [x] Store embeddings in MongoDB or vector store
+### 3. Prepare Data
 
-### 🚧 Part 3: Collaborative Filtering
-- [x] Prepare interaction matrix from likes
-- [x] Train and evaluate Surprise/LightFM model
-- [x] Serialize user latent factors
+Put your cleaned `interactions.csv` inside `data/processed/`.
 
-### 🚧 Part 4: Hybrid Recommender
-- [x] Combine SBERT + ResNet + user embedding
-- [x] Compute cosine similarity
-- [x] Create FastAPI route for /recommendations
+### 4. Train Collaborative Filtering Model
 
-### 🚧 Part 5: MLflow + API Integration
-- [x] Log experiments with MLflow
-- [ ] Serve FastAPI routes with Docker
-- [ ] Create dummy frontend (or use Postman for testing)
+```bash
+python ml_pipeline/train_collab_model.py
+```
 
-### 🚧 Part 6: MVP Deployment
-- [ ] Write Dockerfile and docker-compose.yml
-- [ ] Deploy to AWS EC2 (or Render)
-- [ ] Test with simulated dataset
+This will:
 
-### 🚧 Part 7: Polish & Document
-- [ ] Write case study for portfolio
-- [ ] Add README visualizations
-- [ ] Clean notebooks, scripts, and logs
+* Train an SVD model using Surprise
+* Save it as `cf_model.pkl`
+* Dump user recommendations as JSON
+* Log metrics/artifacts to MLflow
+
+### 5. Start Backend
+
+```bash
+cd backend
+uvicorn main:app --reload
+```
+
+### 6. Start Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-## 💡 Future Enhancements
-- Use Faiss / Pinecone for scalable vector similarity search
-- Add comment-level interactions for richer feedback
-- Train a Learning to Rank (LTR) model (e.g., LightGBM Ranker)
-- Build a real frontend using React or Next.js
+## 🔄 API Endpoints (FastAPI)
+
+| Method | Endpoint             | Description                   |
+| ------ | -------------------- | ----------------------------- |
+| GET    | `/users`             | Fetch paginated list of users |
+| GET    | `/likes/{user_id}`   | Posts liked by user           |
+| GET    | `/recommend/content` | Content-based recs (user\_id) |
+| GET    | `/recommend/collab`  | CF-based recs (user\_id)      |
+| GET    | `/recommend/hybrid`  | Hybrid recs (user\_id)        |
 
 ---
 
-## 📜 License
-MIT License
+## 🎯 Future Improvements
+
+* [ ] Redis caching for frequent user queries
+* [ ] Add user registration & post creation modules
+* [ ] Deploy via Docker + Nginx + AWS/GCP
+* [ ] Integrate TensorFlow/Keras-based image encoders
 
 ---
 
 ## 🧑‍💻 Author
-**Rishwanth P**  
-_Architecting intelligent recommender systems with vision & purpose._
+
+Built by **Rishwanth** – AI/ML Engineer
+Connect on [LinkedIn](https://linkedin.com/in/RishwanthPerumandla) · Portfolio: [rishwanth.com](https://rishwanth.com)
+
+---
+
+## 📜 License
+
+MIT License. Use freely with attribution.

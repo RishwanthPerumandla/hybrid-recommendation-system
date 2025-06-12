@@ -7,6 +7,7 @@ import {
   Tabs,
   Tab,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +22,9 @@ const UserDetail = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const pageSize = 6;
 
   const tabApis = [
     `/likes/${id}`,
@@ -31,12 +35,19 @@ const UserDetail = () => {
 
   const tabLabels = ["Liked Posts", "Content-Based", "Collaborative", "Hybrid"];
 
-  const loadPosts = async (api) => {
+  const loadPosts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:8000${api}`);
+      const skip = (page - 1) * pageSize;
+      const apiWithParams =
+        tabIndex === 0
+          ? `${tabApis[tabIndex]}?skip=${skip}&limit=${pageSize}`
+          : `${tabApis[tabIndex]}&skip=${skip}&limit=${pageSize}`;
+
+      const res = await axios.get(`http://localhost:8000${apiWithParams}`);
       const key = tabIndex === 0 ? "liked_posts" : "recommendations";
       setPosts(res.data[key] || []);
+      setTotalPosts(res.data.pagination?.total || res.data.returned || 0);
     } catch (err) {
       console.error("Error fetching posts:", err);
       setPosts([]);
@@ -45,14 +56,22 @@ const UserDetail = () => {
   };
 
   useEffect(() => {
-    loadPosts(tabApis[tabIndex]);
+    setPage(1); // Reset page when switching tabs
   }, [tabIndex]);
+
+  useEffect(() => {
+    loadPosts();
+  }, [tabIndex, page]);
+
+  const handlePageChange = (_, value) => setPage(value);
 
   if (!user) {
     return (
       <Box p={3}>
         <Typography variant="h6">User not found. Please go back.</Typography>
-        <Button variant="contained" onClick={() => navigate("/")}>Back to Users</Button>
+        <Button variant="contained" onClick={() => navigate("/")}>
+          Back to Users
+        </Button>
       </Box>
     );
   }
@@ -62,7 +81,9 @@ const UserDetail = () => {
       <Typography variant="h4" gutterBottom>
         👤 {user.name} ({user.email})
       </Typography>
-      <Button variant="outlined" onClick={() => navigate("/")}>⬅️ Back to Users</Button>
+      <Button variant="outlined" onClick={() => navigate("/")}>
+        ⬅️ Back to Users
+      </Button>
 
       <Tabs
         value={tabIndex}
@@ -81,7 +102,19 @@ const UserDetail = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <PostGrid posts={posts} />
+        <>
+          <PostGrid posts={posts} />
+          {totalPosts > pageSize && (
+            <Box mt={4} display="flex" justifyContent="center">
+              <Pagination
+                count={Math.ceil(totalPosts / pageSize)}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
       )}
     </Box>
   );
