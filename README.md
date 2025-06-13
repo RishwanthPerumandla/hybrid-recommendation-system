@@ -10,7 +10,6 @@ A full-stack, multimodal post recommendation system combining **content-based** 
 * ⚡ **FastAPI Backend**: Modular, clean routes for users, likes, and recommendations.
 * 🌐 **React Frontend (MUI + Vite)**: Clean dashboard with tabbed views and pagination.
 * 📈 **MLflow Tracking**: All model metrics and artifacts are logged for reproducibility.
-* 🐳 **Docker-Ready**: Clean folder structure and setup for containerization (optional).
 
 ---
 
@@ -23,7 +22,6 @@ A full-stack, multimodal post recommendation system combining **content-based** 
 | ML/NLP                | NumPy, Scikit-learn, Surprise |
 | DB                    | MongoDB                       |
 | MLOps                 | MLflow                        |
-| Deployment (optional) | Docker                        |
 
 ---
 
