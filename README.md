@@ -23,7 +23,7 @@ A full-stack, multimodal post recommendation system combining **content-based** 
 | ML/NLP                | NumPy, Scikit-learn, Surprise |
 | DB                    | MongoDB                       |
 | MLOps                 | MLflow                        |
-| Deployment (optional) | Docker                        |
+| Deployment            | Docker                        |
 
 ---
 
