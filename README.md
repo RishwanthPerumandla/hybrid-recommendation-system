@@ -120,7 +120,7 @@ npm run dev
 
 ## 🧑‍💻 Author
 
-Built by **Rishwanth** – AI/ML Engineer
+Built by **Rishwanth** – Software Engineer
 Connect on [LinkedIn](https://linkedin.com/in/RishwanthPerumandla) · Portfolio: [rishwanth.com](https://rishwanth.com)
 
 ---
